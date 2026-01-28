@@ -52,6 +52,6 @@ jobs:
 
       # deploy it (not really)
       # command line options at https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-cli-command-reference-sam-deploy.html
-      # probably need an IAM user with an attached key for the profile to work
+      # different environments would be handled by different profiles (probably an IAM user with associated key+secret in each account)
       - name: Deploy solution
         run: echo "sam deploy --profile default --region ap-southeast-2 --stack-name weather-function --template-file template.yml"

@@ -8,6 +8,10 @@ For the code itself I used AI Overview that Google Search provides - the templat
 expand it out and figure out a few things, which AI might have been able to help with but I don't think it would have been a huge time-saver. For the GitHub workflow I used Copilot
 to generate roughly what I needed based on the provided specs, asked it to add caching and tweaked it a bit to fix some issues and get it to do exactly what I wanted.
 
+The deployment pipeline is a flow of installing and checking dependencies, building and testing with some caching steps. I built it to require manual triggering though it could have
+been on commit. I didn't use any environment variables as I didn't need any though if it was deploying to multiple environments (test vs prod) I'd have the environment name as an
+environment variable.
+
 I didn't have time to figure out proper logger instantiation - normally I'd use dependency injection for the logger but AWS Lambda expects the function class to have a parameterless
 constructor so I had to work around that (maybe there is a better way but I couldn't find anything). I'd improve the logger formatting as each logged line is across two lines. I'd
 add a bit more unit testing as well - the tests for the HTTP requests cover most of it but there is one untested part of the service. Unknown endpoints return a 403 rather than a
