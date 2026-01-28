@@ -19,9 +19,9 @@ jobs:
       # -----------------------------
       # Install AWS SAM CLI
       # -----------------------------
-      - name: Install AWS SAM CLI
-        run: |
-          choco install awssamcli --yes
+      #- name: Install AWS SAM CLI
+      #  run: |
+      #    choco install awssamcli --yes
 
       - name: Verify SAM installation
         run: sam --version
