@@ -4,25 +4,20 @@ on:
   workflow_dispatch:
 
 jobs:
-  deploy-sam:
+  deploy-weather:
     runs-on: windows-latest
 
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
 
+      # seems to already be installed but good to be sure
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: "8.0"
 
-      # -----------------------------
-      # Install AWS SAM CLI
-      # -----------------------------
-      #- name: Install AWS SAM CLI
-      #  run: |
-      #    choco install awssamcli --yes
-
+      # AWS SAM already seems to be installed on windows-latest and trying to install it again gives the not very helpful "Generic MSI Error" message
       - name: Verify SAM installation
         run: sam --version
 
@@ -54,3 +49,9 @@ jobs:
 
       - name: Build solution
         run: sam build
+
+      # deploy it (not really)
+      # command line options at https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-cli-command-reference-sam-deploy.html
+      # probably need an IAM user with an attached key for the profile to work
+      - name: Deploy solution
+        run: echo "sam deploy --profile default --region ap-southeast-2 --stack-name weather-function --template-file template.yml"
