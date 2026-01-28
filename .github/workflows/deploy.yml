@@ -1,0 +1,56 @@
+name: Deploy
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy-sam:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.22"
+
+      # -----------------------------
+      # Install AWS SAM CLI
+      # -----------------------------
+      - name: Install AWS SAM CLI
+        run: |
+          choco install aws-sam-cli --yes
+
+      - name: Verify SAM installation
+        run: sam --version
+
+      # -----------------------------
+      # NuGet Cache
+      # -----------------------------
+      - name: Cache NuGet packages
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.nuget/packages
+          key: nuget-${{ runner.os }}-${{ hashFiles('**/*.csproj') }}
+          restore-keys: |
+            nuget-${{ runner.os }}-
+
+      - name: Run tests
+        run: ./test.ps1
+
+      # -----------------------------
+      # SAM Build Cache
+      # -----------------------------
+      - name: Cache SAM build artifacts
+        uses: actions/cache@v4
+        with:
+          path: .aws-sam/cache
+          key: sam-${{ runner.os }}-${{ hashFiles('**/*') }}
+          restore-keys: |
+            sam-${{ runner.os }}-
+
+      - name: Build solution
+        run: sam build
